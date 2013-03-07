@@ -90,7 +90,7 @@ $.reject = function(options) {
 			// Path for the cookie to be saved on
 			// Should be root domain in most cases
 			path: '/',
-			// Expiration Date (in seconds)
+			// Expiration Date (in seconds, as a RFC1123 string, or a function that returns a date object)
 			// 0 (default) means it ends with the current session
 			expires: 0
 		},
@@ -163,9 +163,27 @@ $.reject = function(options) {
 
 				// Check if we need to set an expiration date
 				if (opts.cookieSettings.expires !== 0) {
-					var date = new Date();
-					date.setTime(date.getTime()+(opts.cookieSettings.expires*1000));
-					expires = "; expires="+date.toGMTString();
+
+		                    switch (typeof opts.cookieSettings.expires)
+		                    {
+		                        case 'number':
+		                            var date = new Date();
+		                            date.setTime(date.getTime()+(opts.cookieSettings.expires*1000));
+		                            expires = date.toGMTString();
+		                            break;
+		
+		                        case 'function':
+		                            expires = opts.cookieSettings.expires().toGMTString();
+		                            break;
+		
+		                        case 'object':
+		                            expires = opts.cookieSettings.expires.toGMTString();
+		                            break;
+		
+		                        case 'string':
+		                            expires = opts.cookieSettings.expires;
+		                            break;
+		                    }
 				}
 
 				// Get path from settings
