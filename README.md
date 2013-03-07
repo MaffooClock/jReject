@@ -100,7 +100,7 @@ Default Options:
 			// Path for the cookie to be saved on
 			// Should be root domain in most cases
 			path: '/',
-			// Expiration Date (in seconds)
+			// Expiration Date (in seconds, as a RFC1123 string, or a function that returns a date object)
 			// 0 (default) means it ends with the current session
 			expires: 0
 		},
@@ -121,6 +121,7 @@ Default Options:
 	};
 
 Run On load (Default Options):
+
 	$(function() {
 		$.reject();
 	});
